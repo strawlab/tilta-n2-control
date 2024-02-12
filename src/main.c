@@ -56,7 +56,7 @@ int main(void)
 	gpio_pin_set_dt(&led_b, false);
 
 	byte data_to_transmit[] = 
-		"\x0f\x61\x88\xC4\xE7\x01\xFF\xFF\x96\xF0\x44\x05\x00\xB7\x00\x00";
+		"\x0f\x61\x88\x00\xE7\x01\xFF\xFF\x96\xF0\x44\x05\x00\xB7\x00\x00";
 	//     ^^ packet length (with FCS)
 	//                                                             ^^  ^^  space for FCS (packet crc), computed by tx function	
 
@@ -66,18 +66,16 @@ int main(void)
 	nrf_802154_channel_set(12);
 	blink();
 
+	int n = 0;
+
 	while (1) {
-		set_pos(data_to_transmit, 0);
+		set_pos(data_to_transmit, n / 100 % 2 == 0 ? 0 : 1000);
 		ret = nrf_802154_transmit_raw(data_to_transmit, NULL);
 		gpio_pin_set_dt(&led_b, ret);
 		
-		k_msleep(2000);
-
-		set_pos(data_to_transmit, 1000);
-		ret = nrf_802154_transmit_raw(data_to_transmit, NULL);
-		gpio_pin_set_dt(&led_b, ret);
-
-		k_msleep(2000);
+		k_msleep(20);
+		++n;
+		++data_to_transmit[3];
 	}
 	return 0;
 }
