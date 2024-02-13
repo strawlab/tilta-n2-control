@@ -10,7 +10,7 @@
 
 ### 1. Set up the motor
 
-Most importantly, we must set the motor to operate on IEEE 804.15.4 channel 12
+Most importantly, we must set the motor to operate on IEEE 804.15.4 channel 12. If you want it on a different channel, you'll need to change it in both motor and dongle firmware (in `src/main.c`).
 
 1. turn on the Knob.
 2. navigate to Menu -> Connect -> 2.4G -> Channels, activate CH1
