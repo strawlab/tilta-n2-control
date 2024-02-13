@@ -27,9 +27,9 @@ static const struct gpio_dt_spec led_b = GPIO_DT_SPEC_GET(DT_ALIAS(led1_blue), g
 
 void blink(){
 	gpio_pin_set_dt(&led, true);
-	k_msleep(1000);
+	k_msleep(200);
 	gpio_pin_set_dt(&led, false);
-	k_msleep(100);
+	k_msleep(50);
 }
 
 void set_pos(byte* data_to_transmit, int val){
@@ -69,11 +69,13 @@ int main(void)
 	int n = 0;
 
 	while (1) {
-		set_pos(data_to_transmit, n / 100 % 2 == 0 ? 0 : 1000);
+		bool toggle = ((n / 200) % 2 == 0);
+		set_pos(data_to_transmit,  toggle ? n % 2 : 1000 + (n % 2));
+		gpio_pin_set_dt(&led_r, toggle);
 		ret = nrf_802154_transmit_raw(data_to_transmit, NULL);
 		gpio_pin_set_dt(&led_b, ret);
 		
-		k_msleep(20);
+		k_msleep(10);
 		++n;
 		++data_to_transmit[3];
 	}
