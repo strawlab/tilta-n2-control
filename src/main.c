@@ -22,8 +22,6 @@ void set_pos(byte* data_to_transmit, int val){
 
 int main(void)
 {
-	int ret;
-
 	if (!(gpio_is_ready_dt(&led) && gpio_is_ready_dt(&led_r) && gpio_is_ready_dt(&led_b))) {
 		return 0;
 	}
